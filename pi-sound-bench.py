@@ -125,5 +125,6 @@ if __name__ == '__main__':
     
     for x in range(100):
         pin.set(1)
-        time.sleep(1)
+        time.sleep(0.5)
         pin.set(0)
+        time.sleep(0.5)
