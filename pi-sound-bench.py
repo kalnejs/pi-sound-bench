@@ -51,7 +51,7 @@ class GPIO:
 
         if(edge != GPIO.EDGE_NONE):
             print("GPIO: setting edge...")
-            with open(GPIO.EDGE_PATH, 'w') as file:
+            with open(GPIO.EDGE_PATH % self.number, 'w') as file:
                 file.write(edge)  
 
             self.epoll = select.epoll(1)
