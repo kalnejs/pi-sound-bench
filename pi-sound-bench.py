@@ -4,7 +4,8 @@ import subprocess
 import select
 import threading
 import time
-
+import sys
+import pty
 
 class GPIO:
 
@@ -85,56 +86,67 @@ class StoragePlayer:
     MEDIA_BASE_PATH = '/media/'
     MEDIA_AUDIO_EXTENSIONS = ['.mp3', '.wav']
 
-    def __init__(self):
+    def __init__(self, base_folder=''):
         media_path = StoragePlayer.MEDIA_BASE_PATH + os.getlogin() + '/'
         media_list = os.listdir(media_path)
 
         if(not len(media_list)):
-            self.base_path = ''
-            return
+            raise Exception('No media list...')
 
         self.base_path = media_path + media_list[0]
-
-    def get_audio_list(self, base_folder=''):
+        self.audio_list = dict()
 
         if(not self.base_path):
-            print('StoragePlayer: No media detected...')
-            return []
+            raise Exception('No media detected...')
 
         list = os.listdir(self.base_path + base_folder)
 
         file_list = filter(lambda item: os.path.isfile(self.base_path + base_folder+ '/' + item), list)
 
         if(not len(file_list)):
-            print('StoragePlayer: No files detected in path...')
-            return []
+            raise Exception('No files detected in path...')
 
         audio_list = filter(lambda item: [ele for ele in StoragePlayer.MEDIA_AUDIO_EXTENSIONS if(ele in item)], file_list)
 
         if(not len(audio_list)):
-            print('StoragePlayer: No audio files detected in path...')
-            return []
+            raise Exception('No audio files detected in path...')
 
-        return audio_list 
+        for item in audio_list:
+            self.audio_list[item] = self.base_path + base_folder + '/' + item
+
+        self.pty_master, self.pty_slave = os.openpty()
+
+    def get_audio_list(self, base_folder=''):
+        return (self.audio_list.values() or [])
 
 
+    def play(self, path):
+        self.subproc = subprocess.Popen(['mpg123','-C','-f','10000', path], stdin=self.pty_master)
 
+    def stop(self):
+        if(not self.subproc):
+            return
 
+        os.write(self.pty_slave, 's')
 
 if __name__ == '__main__':  
-    # player = StoragePlayer()
-
-    # print(player.get_audio_list())
-
-    def event():
-        print("Event")
-
-    pin = GPIO(8, GPIO.DIRECTION_OUT)
-
-    input = GPIO(21, GPIO.DIRECTION_IN, event, GPIO.EDGE_FALLING)
+    player = StoragePlayer()
     
-    for x in range(100):
-        pin.set(1)
-        time.sleep(0.5)
-        pin.set(0)
-        time.sleep(0.5)
+    player.play(player.get_audio_list()[2])
+
+    time.sleep(3)
+
+    player.stop()
+
+    # def event():
+    #     print('Event')
+
+    # pin = GPIO(8, GPIO.DIRECTION_OUT)
+
+    # input = GPIO(21, GPIO.DIRECTION_IN, event, GPIO.EDGE_FALLING)
+    
+    # for x in range(100):
+    #     pin.set(1)
+    #     time.sleep(0.5)
+    #     pin.set(0)
+    #     time.sleep(0.5)
