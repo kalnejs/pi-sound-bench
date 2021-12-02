@@ -101,12 +101,12 @@ class StoragePlayer:
 
         list = os.listdir(self.base_path + base_folder)
 
-        file_list = filter(lambda item: os.path.isfile(self.base_path + base_folder+ '/' + item), list)
+        file_list = list(filter(lambda item: os.path.isfile(self.base_path + base_folder+ '/' + item), list))
 
         if(not len(file_list)):
             raise Exception('No files detected in path...')
 
-        audio_list = filter(lambda item: [ele for ele in StoragePlayer.MEDIA_AUDIO_EXTENSIONS if(ele in item)], file_list)
+        audio_list = list(filter(lambda item: [ele for ele in StoragePlayer.MEDIA_AUDIO_EXTENSIONS if(ele in item)], file_list))
 
         if(not len(audio_list)):
             raise Exception('No audio files detected in path...')
