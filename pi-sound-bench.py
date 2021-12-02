@@ -120,14 +120,18 @@ class StoragePlayer:
 
 
 
+
 if __name__ == '__main__':  
     # player = StoragePlayer()
 
     # print(player.get_audio_list())
 
+    def event():
+        print("Event")
+
     pin = GPIO(8, GPIO.DIRECTION_OUT)
 
-    input = GPIO(21, GPIO.DIRECTION_IN, None, GPIO.EDGE_FALLING)
+    input = GPIO(21, GPIO.DIRECTION_IN, event, GPIO.EDGE_FALLING)
     
     for x in range(100):
         pin.set(1)
