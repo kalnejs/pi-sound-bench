@@ -41,6 +41,8 @@ class GPIO:
             with open(GPIO.EXPORT_PATH, 'w') as file:
                         file.write('%d' % self.number)
 
+        time.sleep(1)
+
         self.value_file = open(GPIO.VALUE_PATH % self.number, 'r+')
 
         print("GPIO: setting direction...")
