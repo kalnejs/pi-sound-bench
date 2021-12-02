@@ -3,13 +3,13 @@ import os
 import subprocess
 import select
 import multiprocessing
-
+import time
 
 
 class GPIO:
 
     BASE_PATH          = "/sys/class/gpio"
-    EXPORT_PATH        = "/export"
+    EXPORT_PATH        = BASE_PATH + "/export"
 
     PATH               = BASE_PATH + "/gpio%d"
     DIRECTION_PATH     = PATH + "/direction"
@@ -23,13 +23,23 @@ class GPIO:
     DIRECTION_IN       = "in"
     DIRECTION_OUT      = "out"
 
+    DIRECTIONS = (DIRECTION_IN, DIRECTION_OUT)
+    EDGES = (EDGE_NONE, EDGE_RISING, EDGE_FALLING)
+
     def __init__(self, number, direction, callback=None, edge=EDGE_NONE):
+
+        assert(direction in GPIO.DIRECTIONS)
+        assert(edge in GPIO.EDGES)
+        assert(number > 0 and number < 25)
 
         self.number = number
         self.direction = direction
         self.callback  = callback
 
         self.value_file = open(GPIO.VALUE_PATH % self.number, 'r+')
+
+        with open(GPIO.EXPORT_PATH, 'w') as file:
+                    file.write('%d' % number)
 
         with open(GPIO.DIRECTION_PATH % self.number, 'w') as file:
                     file.write(direction)
@@ -43,6 +53,13 @@ class GPIO:
             self.proc = multiprocessing.Process(target=self.event_loop, args=(self))
             self.proc.start()
 
+    def set(self, value):
+        if(value):
+            self.value_file.write("1")
+            self.value_file.seek(0)
+        else:
+            self.value_file.write("0")
+            self.value_file.seek(0)           
 
     def event_loop(self):
         print("GPIO: starting event_loop")
@@ -97,4 +114,10 @@ if __name__ == '__main__':
     player = StoragePlayer()
 
     print(player.get_audio_list())
+
+    pin2 = GPIO(2, GPIO.DIRECTION_OUT)
     
+    for x in range(100):
+        pin2.set(1)
+        time.sleep(1)
+        pin2.set(0)
