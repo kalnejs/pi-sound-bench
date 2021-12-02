@@ -37,15 +37,18 @@ class GPIO:
         self.callback  = callback
 
         if(not os.path.isdir(GPIO.PATH % self.number)):
+            print("GPIO: exporting...")
             with open(GPIO.EXPORT_PATH, 'w') as file:
                         file.write('%d' % self.number)
 
         self.value_file = open(GPIO.VALUE_PATH % self.number, 'r+')
 
+        print("GPIO: setting direction...")
         with open(GPIO.DIRECTION_PATH % self.number, 'w') as file:
                     file.write(direction)
 
         if(edge != GPIO.EDGE_NONE):
+            print("GPIO: setting edge...")
             with open(GPIO.EDGE_PATH, 'w') as file:
                 file.write(edge)  
 
@@ -56,9 +59,11 @@ class GPIO:
 
     def set(self, value):
         if(value):
+            print("GPIO: write 1...")
             self.value_file.write('1')
             self.value_file.seek(0)
         else:
+            print("GPIO: write 0...")
             self.value_file.write('0')
             self.value_file.seek(0)           
 
