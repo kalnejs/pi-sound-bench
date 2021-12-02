@@ -36,10 +36,10 @@ class GPIO:
         self.direction = direction
         self.callback  = callback
 
-        self.value_file = open(GPIO.VALUE_PATH % self.number, 'r+')
-
         with open(GPIO.EXPORT_PATH, 'w') as file:
                     file.write('%d' % number)
+
+        self.value_file = open(GPIO.VALUE_PATH % self.number, 'r+')
 
         with open(GPIO.DIRECTION_PATH % self.number, 'w') as file:
                     file.write(direction)
