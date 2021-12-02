@@ -111,9 +111,9 @@ class StoragePlayer:
 
 
 if __name__ == '__main__':  
-    player = StoragePlayer()
+    # player = StoragePlayer()
 
-    print(player.get_audio_list())
+    # print(player.get_audio_list())
 
     pin2 = GPIO(2, GPIO.DIRECTION_OUT)
     
