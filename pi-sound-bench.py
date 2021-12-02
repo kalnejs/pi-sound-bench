@@ -77,7 +77,8 @@ class GPIO:
             events = self.epoll.poll(1)
             for fileno, event in events:
                 if fileno == self.value_file.fileno():
-                    print('shitme')
+                    if(callable(self.callback)):
+                        self.callback()
 
 class StoragePlayer:
 
