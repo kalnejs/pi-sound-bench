@@ -2,7 +2,7 @@
 import os
 import subprocess
 import select
-import multiprocessing
+import threading
 import time
 
 
@@ -56,7 +56,8 @@ class GPIO:
 
             self.epoll = select.epoll(1)
             self.epoll.register(self.value_file.fileno(), select.EPOLLIN | select.EPOLLET)
-            self.proc = multiprocessing.Process(target=self.event_loop, args=(self))
+            # self.proc = multiprocessing.Process(target=self.event_loop)
+            self.proc = threading.Thread(target=self.event_loop)
             self.proc.start()
 
     def set(self, value):
