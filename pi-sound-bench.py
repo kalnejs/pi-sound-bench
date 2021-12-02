@@ -124,6 +124,8 @@ if __name__ == '__main__':
     # print(player.get_audio_list())
 
     pin = GPIO(8, GPIO.DIRECTION_OUT)
+
+    input = GPIO(21, GPIO.DIRECTION_IN, None, GPIO.EDGE_FALLING)
     
     for x in range(100):
         pin.set(1)
