@@ -101,13 +101,10 @@ class StoragePlayer:
 
         list = os.listdir(self.base_path + base_folder)
 
-        # file_list = list(filter(lambda item: os.path.isfile(self.base_path + base_folder+ '/' + item), list))
         file_list = [item for item in list if os.path.isfile(self.base_path + base_folder+ '/' + item)]
 
         if(not len(file_list)):
             raise Exception('No files detected in path...')
-
-        # audio_list = list(filter(lambda item: [ele for ele in StoragePlayer.MEDIA_AUDIO_EXTENSIONS if(ele in item)], file_list))
 
         audio_list  = [item for item in file_list if [subitem for subitem in StoragePlayer.MEDIA_AUDIO_EXTENSIONS if(subitem in item)]]
 
@@ -120,7 +117,7 @@ class StoragePlayer:
         self.pty_master, self.pty_slave = os.openpty()
 
     def get_audio_list(self, base_folder=''):
-        return (self.audio_list.values() or [])
+        return list(self.audio_list.values())
 
 
     def play(self, path):
@@ -130,12 +127,12 @@ class StoragePlayer:
         if(not self.subproc):
             return
 
-        os.write(self.pty_slave, 's')
+        os.write(self.pty_slave, b's')
 
 if __name__ == '__main__':  
     player = StoragePlayer()
     
-    player.play(player.get_audio_list()[2])
+    player.play(player.get_audio_list()[0])
 
     time.sleep(3)
 
