@@ -150,6 +150,7 @@ class StoragePlayer:
         #     return
 
         os.write(self.pty_slave, b'q')
+        time.sleep(0.5)
 
 if __name__ == '__main__':  
     player = StoragePlayer()
