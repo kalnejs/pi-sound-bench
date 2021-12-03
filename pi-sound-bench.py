@@ -82,7 +82,7 @@ class GPIO:
         return int(val)
 
     def check_and_call(self):
-        print("event_loop: checking...")
+        # print("event_loop: checking...")
         if(self.get() and callable(self.callback)):
             self.callback()
 
@@ -90,46 +90,18 @@ class GPIO:
 
     def event_loop(self):
         print('GPIO: starting event_loop')
-
         while True:
             events = self.epoll.poll(1)
             for fileno, event in events:
                 if fileno == self.value_file.fileno():
-                    print("event_loop: event...")
+                    # print("event_loop: event...")
                     if not self.lock.acquire(blocking=False):
-                        print("event_loop: lock false...")
+                        # print("event_loop: lock false...")
                         continue
 
-                    print("event_loop: starting...")
+                    # print("event_loop: starting...")
                     t = threading.Timer(0.1, self.check_and_call)
                     t.start()
-                    # if(self.timer):
-                    #     print("Cancelling...")
-                    #     self.timer.cancel()
-
-                    # def delayed(self):
-                    #     if(self.skip):
-                    #         self.skip -= 1
-                    #         return
-                    #     if(callable(self.callback)):
-                    #         self.callback()
-                    
-                    # print("Starting...")
-                    # self.timer = threading.Timer(2.0, delayed(self))
-                    # self.timer.start()
-                            
-                    
-                    # if(time.time() - self.timeout > 1):
-                    #     print("OK")
-                    #     if(self.skip):
-                    #         self.skip -= 1
-                    #         continue
-                    #     else:
-                    #         if(callable(self.callback)):
-                    #             self.callback()
-                    # else:
-                    #     print("Too fast")
-                    # self.timeout = time.time()
 
 class StoragePlayer:
 
