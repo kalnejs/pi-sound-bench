@@ -83,13 +83,15 @@ class GPIO:
             for fileno, event in events:
                 if fileno == self.value_file.fileno():
                     if(time.time() - self.timeout > 0.2):
+                        print("OK")
                         if(self.skip):
                             self.skip -= 1
                             continue
                         else:
                             if(callable(self.callback)):
                                 self.callback()
-                    
+                    else:
+                        print("Too fast")
                     self.timeout = time.time()
 
 class StoragePlayer:
@@ -157,14 +159,14 @@ if __name__ == '__main__':
     # player.stop()
 
     def event2():
-        player.stop()
-        player.play(list[0])
+        # player.stop()
+        # player.play(list[0])
         print('Event2')
 
 
     def event22():
-        player.stop()
-        player.play(list[1])
+        # player.stop()
+        # player.play(list[1])
         print('Event22')
 
     pin2 = GPIO(2, GPIO.DIRECTION_IN, event2, GPIO.EDGE_FALLING)
