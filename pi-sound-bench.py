@@ -117,7 +117,7 @@ class StoragePlayer:
         self.pty_master, self.pty_slave = os.openpty()
 
     def get_audio_list(self, base_folder=''):
-        return list(self.audio_list.values())
+        return sorted(self.audio_list.values())
 
 
     def play(self, path):
@@ -132,16 +132,32 @@ class StoragePlayer:
 if __name__ == '__main__':  
     player = StoragePlayer()
     
-    player.play(player.get_audio_list()[0])
+    list = player.get_audio_list()
 
-    time.sleep(3)
+    # print(list)
 
-    player.stop()
+    # if(not len(list)):
+    #     exit()
 
-    # def event():
-    #     print('Event')
+    # player.play(list[0])
 
-    # pin = GPIO(8, GPIO.DIRECTION_OUT)
+    # time.sleep(3)
+
+    # player.stop()
+
+    def event2():
+        player.stop()
+        player.play(list[0])
+        print('Event2')
+
+
+    def event22():
+        player.stop()
+        player.play(list[1])
+        print('Event22')
+
+    pin2 = GPIO(2, GPIO.DIRECTION_IN, event2, GPIO.EDGE_FALLING)
+    pin22 = GPIO(22, GPIO.DIRECTION_IN, event22, GPIO.EDGE_FALLING)
 
     # input = GPIO(21, GPIO.DIRECTION_IN, event, GPIO.EDGE_FALLING)
     
