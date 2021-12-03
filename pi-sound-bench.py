@@ -31,7 +31,7 @@ class GPIO:
 
         assert(direction in GPIO.DIRECTIONS)
         assert(edge in GPIO.EDGES)
-        assert(number > 0 and number < 25)
+        assert(number > 0 and number < 28)
 
         self.skip = 3
         self.number = number
