@@ -4,8 +4,6 @@ import subprocess
 import select
 import threading
 import time
-import sys
-import pty
 
 class GPIO:
 
@@ -37,7 +35,6 @@ class GPIO:
         self.number = number
         self.direction = direction
         self.callback  = callback
-        # self.timer = None
         self.lock = threading.Lock()
 
         if(not os.path.isdir(GPIO.PATH % self.number)):
@@ -62,7 +59,6 @@ class GPIO:
 
             self.epoll = select.epoll(1)
             self.epoll.register(self.value_file.fileno(), select.EPOLLIN | select.EPOLLET)
-            # self.proc = multiprocessing.Process(target=self.event_loop)
             self.proc = threading.Thread(target=self.event_loop)
             self.proc.start()
 
@@ -82,7 +78,6 @@ class GPIO:
         return int(val)
 
     def check_and_call(self):
-        # print("event_loop: checking...")
         if(self.get() and callable(self.callback)):
             self.callback()
 
@@ -94,12 +89,9 @@ class GPIO:
             events = self.epoll.poll(1)
             for fileno, event in events:
                 if fileno == self.value_file.fileno():
-                    # print("event_loop: event...")
                     if not self.lock.acquire(blocking=False):
-                        # print("event_loop: lock false...")
                         continue
 
-                    # print("event_loop: starting...")
                     t = threading.Timer(0.1, self.check_and_call)
                     t.start()
 
@@ -151,8 +143,6 @@ class StoragePlayer:
         if(not self.subproc):
             return
 
-        # os.write(self.pty_slave, b'q')
-        # time.sleep(0.5)
         self.subproc.kill()
         self.subproc = None
 
@@ -160,17 +150,6 @@ if __name__ == '__main__':
     player = StoragePlayer()
     
     list = player.get_audio_list()
-
-    # print(list)
-
-    # if(not len(list)):
-    #     exit()
-
-    # player.play(list[0])
-
-    # time.sleep(3)
-
-    # player.stop()
 
     def event27():
         player.stop()
@@ -185,11 +164,3 @@ if __name__ == '__main__':
 
     pin27 = GPIO(27, GPIO.DIRECTION_IN, event27, GPIO.EDGE_RISING)
     pin22 = GPIO(22, GPIO.DIRECTION_IN, event22, GPIO.EDGE_RISING)
-
-    # input = GPIO(21, GPIO.DIRECTION_IN, event, GPIO.EDGE_FALLING)
-    
-    # for x in range(100):
-    #     pin.set(1)
-    #     time.sleep(0.5)
-    #     pin.set(0)
-    #     time.sleep(0.5)
