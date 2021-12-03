@@ -151,8 +151,8 @@ class StoragePlayer:
         if(not self.subproc):
             return
 
-        os.write(self.pty_slave, b'q')
-        time.sleep(0.5)
+        # os.write(self.pty_slave, b'q')
+        # time.sleep(0.5)
         self.subproc.kill()
         self.subproc = None
 
