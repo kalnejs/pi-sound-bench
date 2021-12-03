@@ -168,14 +168,14 @@ if __name__ == '__main__':
     # player.stop()
 
     def event27():
-        # player.stop()
-        # player.play(list[0])
+        player.stop()
+        player.play(list[0])
         print('Event27')
 
 
     def event22():
-        # player.stop()
-        # player.play(list[1])
+        player.stop()
+        player.play(list[1])
         print('Event22')
 
     pin27 = GPIO(27, GPIO.DIRECTION_IN, event27, GPIO.EDGE_RISING)
