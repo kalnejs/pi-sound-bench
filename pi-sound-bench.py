@@ -86,7 +86,7 @@ class GPIO:
                         print("Cancelling...")
                         self.timer.cancel()
 
-                    def delayed():
+                    def delayed(self):
                         if(self.skip):
                             self.skip -= 1
                             return
@@ -94,7 +94,7 @@ class GPIO:
                             self.callback()
                     
                     print("Starting...")
-                    self.timer = threading.Timer(2.0, delayed())
+                    self.timer = threading.Timer(2.0, delayed(self))
                     self.timer.start()
                             
                     
