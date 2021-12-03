@@ -37,6 +37,7 @@ class GPIO:
         self.number = number
         self.direction = direction
         self.callback  = callback
+        self.timeout = time.time()
 
         if(not os.path.isdir(GPIO.PATH % self.number)):
             print("GPIO: exporting...")
@@ -81,12 +82,15 @@ class GPIO:
             events = self.epoll.poll(1)
             for fileno, event in events:
                 if fileno == self.value_file.fileno():
-                    if(self.skip):
-                        self.skip -= 1
-                        continue
-                    else:
-                        if(callable(self.callback)):
-                            self.callback()
+                    if(time.time() - self.timeout > 0.2):
+                        if(self.skip):
+                            self.skip -= 1
+                            continue
+                        else:
+                            if(callable(self.callback)):
+                                self.callback()
+                    
+                    self.timeout = time.time()
 
 class StoragePlayer:
 
