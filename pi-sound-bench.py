@@ -33,6 +33,7 @@ class GPIO:
         assert(edge in GPIO.EDGES)
         assert(number > 0 and number < 25)
 
+        self.skip = 3
         self.number = number
         self.direction = direction
         self.callback  = callback
@@ -80,8 +81,12 @@ class GPIO:
             events = self.epoll.poll(1)
             for fileno, event in events:
                 if fileno == self.value_file.fileno():
-                    if(callable(self.callback)):
-                        self.callback()
+                    if(self.skip):
+                        self.skip -= 1
+                        continue
+                    else:
+                        if(callable(self.callback)):
+                            self.callback()
 
 class StoragePlayer:
 
