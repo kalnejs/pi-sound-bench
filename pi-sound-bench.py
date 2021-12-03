@@ -83,6 +83,7 @@ class GPIO:
             for fileno, event in events:
                 if fileno == self.value_file.fileno():
                     if(self.timer):
+                        print("Cancelling...")
                         self.timer.cancel()
                     if(callable(self.callback)):
                         self.timer = threading.Timer(0.5, self.callback())
