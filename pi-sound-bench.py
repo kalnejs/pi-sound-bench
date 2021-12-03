@@ -169,8 +169,8 @@ if __name__ == '__main__':
         # player.play(list[1])
         print('Event22')
 
-    pin27 = GPIO(27, GPIO.DIRECTION_IN, event27, GPIO.EDGE_FALLING)
-    pin22 = GPIO(22, GPIO.DIRECTION_IN, event22, GPIO.EDGE_FALLING)
+    pin27 = GPIO(27, GPIO.DIRECTION_IN, event27, GPIO.EDGE_RISING)
+    pin22 = GPIO(22, GPIO.DIRECTION_IN, event22, GPIO.EDGE_RISING)
 
     # input = GPIO(21, GPIO.DIRECTION_IN, event, GPIO.EDGE_FALLING)
     
