@@ -101,7 +101,7 @@ class GPIO:
                         continue
 
                     print("event_loop: starting...")
-                    t = threading.Timer(0.2, self.check_and_call)
+                    t = threading.Timer(0.1, self.check_and_call)
                     t.start()
                     # if(self.timer):
                     #     print("Cancelling...")
