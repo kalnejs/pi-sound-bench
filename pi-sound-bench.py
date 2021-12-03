@@ -50,6 +50,8 @@ class GPIO:
         with open(GPIO.DIRECTION_PATH % self.number, 'w') as file:
                     file.write(direction)
 
+        time.sleep(1)
+
         if(edge != GPIO.EDGE_NONE):
             print("GPIO: setting edge...")
             with open(GPIO.EDGE_PATH % self.number, 'w') as file:
