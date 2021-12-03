@@ -37,7 +37,8 @@ class GPIO:
         self.number = number
         self.direction = direction
         self.callback  = callback
-        self.timer = None
+        # self.timer = None
+        self.lock = threading.Lock()
 
         if(not os.path.isdir(GPIO.PATH % self.number)):
             print("GPIO: exporting...")
@@ -75,6 +76,17 @@ class GPIO:
             self.value_file.write('0')
             self.value_file.seek(0)           
 
+    def get(self):
+        val = self.value_file.read()
+        self.value_file.seek(0)
+        return int(val)
+
+    def check_and_call(self):
+        if(self.get() and callable(self.callback)):
+            self.callback()
+
+        self.lock.release()
+
     def event_loop(self):
         print('GPIO: starting event_loop')
 
@@ -82,20 +94,25 @@ class GPIO:
             events = self.epoll.poll(1)
             for fileno, event in events:
                 if fileno == self.value_file.fileno():
-                    if(self.timer):
-                        print("Cancelling...")
-                        self.timer.cancel()
+                    if not self.lock.acquire(blocking=False):
+                        return
 
-                    def delayed(self):
-                        if(self.skip):
-                            self.skip -= 1
-                            return
-                        if(callable(self.callback)):
-                            self.callback()
+                    t = threading.Timer(0.2, self.check_and_call)
+                    t.start()
+                    # if(self.timer):
+                    #     print("Cancelling...")
+                    #     self.timer.cancel()
+
+                    # def delayed(self):
+                    #     if(self.skip):
+                    #         self.skip -= 1
+                    #         return
+                    #     if(callable(self.callback)):
+                    #         self.callback()
                     
-                    print("Starting...")
-                    self.timer = threading.Timer(2.0, delayed(self))
-                    self.timer.start()
+                    # print("Starting...")
+                    # self.timer = threading.Timer(2.0, delayed(self))
+                    # self.timer.start()
                             
                     
                     # if(time.time() - self.timeout > 1):
