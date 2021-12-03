@@ -38,7 +38,6 @@ class GPIO:
         self.direction = direction
         self.callback  = callback
         # self.timer = None
-        self.subproc = None
         self.lock = threading.Lock()
 
         if(not os.path.isdir(GPIO.PATH % self.number)):
@@ -112,6 +111,8 @@ class StoragePlayer:
     def __init__(self, base_folder=''):
         media_path = StoragePlayer.MEDIA_BASE_PATH + os.getlogin() + '/'
         media_list = os.listdir(media_path)
+
+        self.subproc = None
 
         if(not len(media_list)):
             raise Exception('No media list...')
