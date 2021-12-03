@@ -86,16 +86,16 @@ class GPIO:
                         print("Cancelling...")
                         self.timer.cancel()
 
-                        def delayed():
-                            if(self.skip):
-                                self.skip -= 1
-                                return
-                            if(callable(self.callback)):
-                                self.callback()
+                    def delayed():
+                        if(self.skip):
+                            self.skip -= 1
+                            return
+                        if(callable(self.callback)):
+                            self.callback()
                     
-                        print("Starting...")
-                        self.timer = threading.Timer(2.0, delayed())
-                        self.timer.start()
+                    print("Starting...")
+                    self.timer = threading.Timer(2.0, delayed())
+                    self.timer.start()
                             
                     
                     # if(time.time() - self.timeout > 1):
