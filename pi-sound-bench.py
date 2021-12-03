@@ -87,6 +87,7 @@ class GPIO:
                         self.timer.cancel()
                     if(callable(self.callback)):
                         self.timer = threading.Timer(0.5, self.callback())
+                        self.timer.start()
                             
                     
                     # if(time.time() - self.timeout > 1):
