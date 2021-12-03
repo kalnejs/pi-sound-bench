@@ -149,7 +149,7 @@ class StoragePlayer:
         # if(not self.subproc):
         #     return
 
-        os.write(self.pty_slave, b's')
+        os.write(self.pty_slave, b'q')
 
 if __name__ == '__main__':  
     player = StoragePlayer()
