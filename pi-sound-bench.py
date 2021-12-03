@@ -86,7 +86,7 @@ class GPIO:
                         print("Cancelling...")
                         self.timer.cancel()
                     if(callable(self.callback)):
-                        self.timer = threading.Timer(0.5, self.callback())
+                        self.timer = threading.Timer(2.0, self.callback())
                         # self.timer.start()
                             
                     
