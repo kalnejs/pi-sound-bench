@@ -98,7 +98,7 @@ class GPIO:
                     print("event_loop: event...")
                     if not self.lock.acquire(blocking=False):
                         print("event_loop: lock false...")
-                        return
+                        continue
 
                     print("event_loop: starting...")
                     t = threading.Timer(0.2, self.check_and_call)
