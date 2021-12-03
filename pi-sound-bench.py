@@ -82,6 +82,7 @@ class GPIO:
         return int(val)
 
     def check_and_call(self):
+        print("event_loop: checking...")
         if(self.get() and callable(self.callback)):
             self.callback()
 
@@ -94,9 +95,12 @@ class GPIO:
             events = self.epoll.poll(1)
             for fileno, event in events:
                 if fileno == self.value_file.fileno():
+                    print("event_loop: event...")
                     if not self.lock.acquire(blocking=False):
+                        print("event_loop: lock false...")
                         return
 
+                    print("event_loop: starting...")
                     t = threading.Timer(0.2, self.check_and_call)
                     t.start()
                     # if(self.timer):
