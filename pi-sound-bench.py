@@ -38,6 +38,7 @@ class GPIO:
         self.direction = direction
         self.callback  = callback
         # self.timer = None
+        self.subproc = None
         self.lock = threading.Lock()
 
         if(not os.path.isdir(GPIO.PATH % self.number)):
@@ -146,11 +147,13 @@ class StoragePlayer:
         self.subproc = subprocess.Popen(['mpg123','-C','-f','10000', path], stdin=self.pty_master)
 
     def stop(self):
-        # if(not self.subproc):
-        #     return
+        if(not self.subproc):
+            return
 
         os.write(self.pty_slave, b'q')
         time.sleep(0.5)
+        self.subproc.kill()
+        self.subproc = None
 
 if __name__ == '__main__':  
     player = StoragePlayer()
